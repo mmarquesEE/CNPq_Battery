@@ -1,0 +1,8 @@
+slprj/
+resources/
+
+*.mldatx
+*.slxc
+*.asv
+*.mexw64
+
