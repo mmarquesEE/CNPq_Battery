@@ -7,17 +7,15 @@ V = data(:, 2);
 
 a = fit(Cc, V, 'smoothingspline');
 
-coef = coeffvalues(a)
+CcOut = feval(a, Cc);
 
-
-%%
 figure(1);
 plot(Cc, V, 'bo-', 'DisplayName', 'Dados Originais');
 hold on;
 plot(Cc, CcOut, 'r-', 'LineWidth', 2, 'DisplayName', 'Spline Cúbico');
-xlabel('Capacidade de descarga ');
+xlabel('Capacidade de descarga(Ah)');
 ylabel('Tensão(V)');
-title('Modelo - Capacidade de descarga(Ah) (by Taxa 0.2C)');
+title('Modelo - Capacidade de descarga(Ah) (by Taxa 0.2C)')
 legend;
 grid on;
 
