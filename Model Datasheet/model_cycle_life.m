@@ -1,23 +1,36 @@
-data = csvread('Cycle Life/cycle_life.csv');
+clc ,close all
 
-cycleLife = data(:, 1);
-capacity = data(:, 2); 
+data = csvread("Model Datasheet\Data\cycle_life.csv");
 
-model_exp = @(a, x) a(1) * exp(a(2) * (x - a(3))) + a(4)*exp(a(5)*x) + a(6) ;
+k = data(:, 1);
+Cc0 = data(:, 2); 
 
+f = @(n, a, k) a(1)*exp(-n*k/a(2)) + a(3);
 
-x0 = [3300, 1/500 , 0 , 0, -130, 10/500]; 
+Ne = 2;
+Cc = Cc0;
+CcOut = zeros(length(k),1);
+a = zeros(Ne,3);
 
-[x,resnorm,~,exitflag,output] = lsqcurvefit(model_exp, x0, cycleLife, capacity);
+rng(200);
+for i = 1:Ne
+    a0 = [Cc(1), 500, 0]; 
+    a(i,:) = lsqcurvefit(@(a,k) f(i,a,k), a0, k, Cc);
+        
+    Cc = Cc - f(i,a(i,:),k);
+    CcOut = CcOut + f(i,a(i,:),k);
+end
+%%
 
+display(['f = ',num2str(a(1,1),2), ...
+    '*exp(-k/',num2str(a(1,2),2),') + ',num2str(a(2,1),2), ...
+    '*exp(-k/',num2str(a(2,2),2),') + ',num2str(sum(a(:,3)),2)]);
 
+%%
 figure(1);
-plot(cycleLife, capacity, 'bo', 'DisplayName', 'Dados Originais');
+plot(k, Cc0, 'bo', 'DisplayName', 'Dados Originais');
 hold on;
-plot(cycleLife, model_exp(x,cycleLife), 'g-', 'LineWidth', 2, 'DisplayName', 'Modelo Exponencial');
+plot(k, CcOut, 'g-', 'LineWidth', 2, 'DisplayName', 'Modelo Exponencial');
 xlabel('Ciclos de Vida');
 ylabel('Capacidade');
 grid on;
-
-
-fprintf('a = %.2f, b = %.2f\n, c = %.2f\n, d = %.2f\n, e = %.2f\n, f = %.2f\n', x(1), x(2), x(3), x(4), x(5), x(6));
