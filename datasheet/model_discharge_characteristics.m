@@ -1,4 +1,5 @@
 function [f,a] = model_discharge_characteristics()
+close all
 
 data = csvread("datasheet\Data\Caracteristica_de_descarga_1C.csv");
 

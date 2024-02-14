@@ -1,4 +1,5 @@
 function [f,a] = model_cycle_life()
+close all
 
 data = csvread("datasheet\Data\cycle_life.csv");
 
