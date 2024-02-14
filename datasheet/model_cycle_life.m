@@ -1,9 +1,8 @@
-clear all,clc ,close all
+function [f,a] = model_cycle_life()
 
-data = csvread("Model Datasheet\Data\cycle_life.csv");
+data = csvread("datasheet\Data\cycle_life.csv");
 
-k = data(:, 1);
-Cc0 = data(:, 2); 
+[k,Cc0] = preprocessData(data(:,1),data(:,2),1000);
 
 f = @(a, k) a(1)*exp(-k/a(2)) + a(3);
 
@@ -27,11 +26,13 @@ display(['f = ',num2str(a(1,1),np), ...
     '*exp(-k/',num2str(a(2,2),np),') + ',num2str(sum(a(:,3)),np)]);
 
 %%
-figure(1);
-plot(k, Cc0, 'bo', 'DisplayName', 'Dados Originais');
+figure;
+plot(data(:,1), data(:,2), 'o', MarkerSize=10, DisplayName='Dados Originais');
 hold on;
-%%
-plot(k, CcOut, 'g-', 'LineWidth', 2, 'DisplayName', 'Modelo Exponencial');
+
+plot(k, CcOut, '-', LineWidth=1.3, DisplayName='Modelo Exponencial');
 xlabel('Ciclos de Vida');
 ylabel('Capacidade');
 grid on;
+
+end
