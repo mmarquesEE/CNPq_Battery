@@ -2,11 +2,11 @@ function [f,a] = model_cycle_life()
 close all
 
 data = csvread("datasheet\Data\cycle_life.csv");
-[k,Cc0] = preprocessData(data(:,1),data(:,2),1000,Plot=true);
+[k,Cc0] = preprocessData(data(:,1),data(:,2),1000);
 
 f = @(a, x) a(1)*exp(x/a(2)) + a(3);
 
-Ne = 2;
+Ne = 3;
 Cc = Cc0;
 CcOut = zeros(length(k),1);
 a = zeros(Ne,3);
@@ -34,9 +34,5 @@ plot(k, CcOut, '-', LineWidth=1);
 xlabel('Ciclos de Vida');
 ylabel('Capacidade');
 grid on;
-
-figure
-plot(k, Cc0, '-', LineWidth=2);
-grid on
 
 end
