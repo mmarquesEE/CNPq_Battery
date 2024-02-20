@@ -13,7 +13,7 @@ arguments
 end
 
 narginchk(0,3);
-nargoutchk(0,4);
+nargoutchk(0,6);
 
 if nargin < 1
     data = csvread("datasheet\Data\Caracteristica_de_descarga_-10º.csv");
@@ -29,6 +29,14 @@ else
     data = [varargin{1},varargin{2}];
 end
 
+if nargin > 2
+    validateattributes(varargin{3},{'numeric'},...
+        {'scalar','integer','positive'});
+    n = varargin{3};
+else
+    n = 200;
+end
+
 if nargout < 1
     Plot = true;
 else
@@ -39,6 +47,7 @@ if opts.CloseFigures
     close all
 end
 
+%% Preprocessing
 dataX = data(:,1);
 dataY = data(:,2);
 
@@ -48,13 +57,6 @@ conditions = dataY >= opts.cutoffVoltage & ...
 dataX = dataX(conditions);
 dataY = dataY(conditions);
 
-if nargin > 2
-    validateattributes(varargin{3},{'numeric'},...
-        {'scalar','integer','positive'});
-    n = varargin{3};
-else
-    n = 200;
-end
 
 [x,y0] = preprocessData(dataX,dataY,n);
 
@@ -157,17 +159,9 @@ if nargout > 0
     varargout{1} = fout;
 end
 if nargout > 1
-    modelData.Linear.Coeffs = alinear;
-    modelData.Linear.Function = flinear;
-    modelData.Linear.resnorm = resnorm_linear;
-    
-    modelData.LowDischargeExp.Coeffs = a{1};
-    modelData.LowDischargeExp.Function = fexp;
-    modelData.LowDischargeExp.resnorm = resnorm_exp{1};
-    
-    modelData.HighDischargeExp.Coeffs = a{2};
-    modelData.HighDischargeExp.Function = fexp;
-    modelData.HighDischargeExp.resnorm = resnorm_exp{2};
+    modelData.Coeffs = transpose([alinear;a{1};a{2}]);
+    modelData.Function = {flinear,fexp};
+    modelData.resnorm = [resnorm_linear;resnorm_exp{1};resnorm_exp{2}];
     
     varargout{2} = modelData;
 end
@@ -176,6 +170,10 @@ if nargout > 2
 end
 if nargout > 3
     varargout{4} = yout;
+end
+if nargout == 6
+    varargout{5} = dataX;
+    varargout{6} = dataY;
 end
 
 end
