@@ -1,5 +1,7 @@
 slprj/
 resources/
+NASAdataset/archive/
+NASAdataset/archive.zip
 
 *.mldatx
 *.slxc
