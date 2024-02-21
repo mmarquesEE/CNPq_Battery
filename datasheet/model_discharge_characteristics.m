@@ -159,9 +159,9 @@ if nargout > 0
     varargout{1} = fout;
 end
 if nargout > 1
-    modelData.Coeffs = transpose([alinear;a{1};a{2}]);
+    modelData.Coeffs = [alinear,a{1},a{2}];
     modelData.Function = {flinear,fexp};
-    modelData.resnorm = [resnorm_linear;resnorm_exp{1};resnorm_exp{2}];
+    modelData.resnorm = [resnorm_linear,resnorm_exp{1},resnorm_exp{2}];
     
     varargout{2} = modelData;
 end
