@@ -20,11 +20,11 @@ for i = 1:length(batt_ids)
         metadata.Properties.VariableNames);
 
     discharge = crr_table(string(crr_table.type)=="discharge", ...
-        {'start_time','ambient_temperature','filename','Capacity'});
+        {'type','start_time','ambient_temperature','filename','Capacity'});
     charge = crr_table(string(crr_table.type)=="charge", ...
-        {'start_time','ambient_temperature','filename'});
+        {'type','start_time','ambient_temperature','filename'});
     impedance = crr_table(string(crr_table.type)=="impedance", ...
-        {'start_time','ambient_temperature','filename','Re','Rct'});
+        {'type','start_time','ambient_temperature','filename','Re','Rct'});
 
     batt{i}.discharge = discharge;
     batt{i}.charge = charge;
@@ -32,3 +32,17 @@ for i = 1:length(batt_ids)
 end
 
 save("dataStructs.mat","batt");
+
+%%
+
+a = batt{1}.charge(:,{'type','start_time','filename'});
+b = batt{1}.discharge(:,{'type','start_time','filename'});
+
+c = [a;b];
+
+for i = 1:height(c)
+    d(i) = datenum(str2num(c(i,'start_time').start_time{1}));
+end
+
+[~,idx] = sort(d);
+f = c(idx,c.Properties.VariableNames);
