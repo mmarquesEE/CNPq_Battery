@@ -1,0 +1,9 @@
+Measurement Parameters Settings:,Battery Impedance,
+Start Frequency,1,Hz
+Points,-1,
+AC Amplitude,600,mVpp
+DC Bias,1200,mVpp
+Enable,1,
+Stop Frequency,100,Hz
+Logarithmic,0,
+Calibration Resistor,50,mΩ
