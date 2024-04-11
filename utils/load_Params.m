@@ -2,7 +2,7 @@
 load("input_modelo_bateria.mat");
 load("MainConfig.mat");
 
-open_system("main\CyclingProcess");
+open_system("main\CyclingProcess_v2.slx");
 
 Temperature = 20; % ºC
 SOC_MAX = 70;
